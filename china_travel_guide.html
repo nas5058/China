@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Полная энциклопедия путешествия в Китай: Маршрут, Бюджет, Документы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #d93829;
+      --primary-hover: #b32518;
+      --bg: #0b0f17;
+      --card-bg: #141a24;
+      --card-sub-bg: #1c2433;
+      --text-main: #f3f4f6;
+      --text-muted: #94a3b8;
+      --accent: #f59e0b;
+      --accent-blue: #38bdf8;
+      --accent-green: #10b981;
+      --danger: #ef4444;
+      --border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 25px 15px 50px 15px;
+    }
+
+    .container { max-width: 1220px; margin: 0 auto; }
+
+    /* Верхнее меню табов */
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+      background: var(--card-bg);
+      padding: 8px 12px;
+      border-radius: 50px;
+      border: 1px solid var(--border-color);
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 9px 18px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .nav-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(217, 56, 41, 0.45);
+    }
+
+    /* Страницы */
+    .page-view {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .page-view.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    header { text-align: center; margin-bottom: 30px; }
+
+    header h1 {
+      font-size: 2.3rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, #ff7b72, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    /* Карточки и Сетка */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .img-box {
+      width: 100%;
+      height: 220px;
+      position: relative;
+      background: #1f2735;
+      overflow: hidden;
+    }
+
+    .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .card:hover .img-box img { transform: scale(1.05); }
+
+    .city-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(11, 15, 23, 0.88);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 6px; }
+    .card-desc { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 16px; }
+
+    .price-box {
+      background: var(--card-sub-bg);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .price-title { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
+    .price-val { font-size: 1.15rem; font-weight: 700; color: #fff; margin-top: 2px; }
+    .price-note { font-size: 0.78rem; color: #94a3b8; }
+
+    .booking-box {
+      margin-top: auto;
+      border-top: 1px solid var(--border-color);
+      padding-top: 14px;
+    }
+
+    .booking-label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; }
+    .booking-links { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .booking-btn {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(217, 56, 41, 0.15);
+      color: #ff9b91;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: 1px solid rgba(217, 56, 41, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .booking-btn:hover { background: var(--primary); color: #fff; }
+
+    .booking-rule {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: #cbd5e1;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 6px 10px;
+      border-radius: 6px;
+      line-height: 1.4;
+    }
+
+    /* Фильтр недели */
+    .filter-panel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 0 auto 30px auto;
+      background: var(--card-bg);
+      padding: 10px 18px;
+      border-radius: 40px;
+      border: 1px solid var(--border-color);
+      width: fit-content;
+    }
+
+    .filter-label { font-weight: 600; color: var(--accent); font-size: 0.85rem; text-transform: uppercase; }
+    .btn-toggle {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+    .btn-toggle.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+
+    /* Таблицы и информационные блоки */
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 30px 0 15px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    .section-desc { color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem; }
+
+    .table-container {
+      overflow-x: auto;
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 30px;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    table.data-table th, table.data-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    table.data-table th {
+      background: var(--card-sub-bg);
+      color: var(--accent);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.5px;
+    }
+
+    table.data-table tr:last-child td { border-bottom: none; }
+
+    /* Инфо-карточки */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .info-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+
+    .info-card ol, .info-card ul {
+      padding-left: 20px;
+      font-size: 0.88rem;
+      color: #cbd5e1;
+    }
+
+    .info-card li { margin-bottom: 8px; }
+
+    .highlight-badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      margin-right: 4px;
+    }
+    .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-blue { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+    /* Предупреждающий блок */
+    .alert-block {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-left: 5px solid var(--danger);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 25px;
+    }
+
+    .alert-block h4 { color: #fca5a5; font-size: 1.05rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .alert-block p, .alert-block ul { font-size: 0.88rem; color: #e2e8f0; }
+
+    /* Футер навигации страниц */
+    .page-footer-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .nav-arrow-btn {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      transition: all 0.2s ease;
+    }
+
+    .nav-arrow-btn:hover { background: var(--primary); border-color: var(--primary); }
+
+    footer { text-align: center; margin-top: 45px; color: var(--text-muted); font-size: 0.82rem; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Навигационные вкладки -->
+    <nav class="top-nav">
+      <button class="nav-btn active" id="tab-1" onclick="switchPage(1)">📍 Локации и запись</button>
+      <button class="nav-btn" id="tab-2" onclick="switchPage(2)">🌦️ Погода и сезоны</button>
+      <button class="nav-btn" id="tab-3" onclick="switchPage(3)">📑 Документы, Оплата, SIM</button>
+      <button class="nav-btn" id="tab-4" onclick="switchPage(4)">✈️ Перелеты и Транспорт</button>
+    </nav>
+
+    <!-- ==================================================== -->
+    <!-- СТРАНИЦА 1: КАРТОЧКИ МЕСТ, ЦЕНЫ И БРОНИРОВАНИЕ       -->
+    <!-- ==================================================== -->
+    <div class="page-view active" id="page-1">
+      <header>
+        <h1>Главные достопримечательности</h1>
+        <p>Пекин • Горы Чжанцзяцзе • Шанхай | Стоимость входа и предварительная запись</p>
+      </header>
+
+      <div class="filter-panel">
+        <span class="filter-label">День визита:</span>
+        <button class="btn-toggle active" onclick="setMode('weekday')">Будние дни (Пн-Пт)</button>
+        <button class="btn-toggle" onclick="setMode('weekend')">Выходные и праздники (Сб-Вс)</button>
+      </div>
+
+      <div class="grid">
+        <!-- Стена Мутяньюй -->
+        <div class="card" data-weekday="~180 ¥ (~2 300 ₽)" data-weekend="~180 ¥ (~2 300 ₽)" data-wnote="Вход 40¥ + шаттл 15¥ + канатка/тобогган 140¥. В выходные очередь на санях вырастает!">
+          <div class="img-box">
+            <span class="city-badge">Пекин</span>
+            <img src="images/mutianyu.jpg" alt="Великая Китайская стена" onerror="this.src='https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=800&q=80'">
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">Стена Мутяньюй (Mutianyu)</h2>
+            <p class="card-desc">Отреставрированный живописный участок среди лесистых гор: канатная дорога и скоростной спуск на санях-тобоггане.</p>
+            <div class="price-box">
+              <div class="price-title">Стоимость билета</div>
+              <div class="price-val price-display">~180 ¥ (~2 300 ₽)</div>
+              <div class="price-note note-display">Вход + трансфер + фуникулер/тобогган в обе стороны</div>
+            </div>
+            <div class="booking-box">
+              <div class="booking-label">Бронирование заранее:</div>
+              <div class="booking-links">
+                <a href="https://www.trip.com" target="_blank" class="booking-btn">Trip.com ↗</a>
+                <a href="https://www.klook.com" target="_blank" class="booking-btn">Klook ↗</a>
+              </div>
+              <div class="booking-rule">⏰ Бронь за 10–14 дней по загранпаспорту. Выбирайте автобусный трансфер от метро Dongzhimen до 08:30 утра.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Запретный город -->
+        <div class="card" data-weekday="60 ¥ (~770 ₽)" data-weekend="60 ¥ (~770 ₽)" data-wnote="Понедельник — закрыт! В выходные билеты разбирают за секунды.">
+          <div class="img-box">
+            <span class="city-badge">Пекин</span>
+            <img src="images/forbidden_city.jpg" alt="Запретный город" onerror="this.src='https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=800&q=80'">
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">Запретный город (Гугун)</h2>
+            <p class="card-desc">Дворцовый комплекс китайских императоров. Самый крупный деревянный ансамбль в мире.</p>
+            <div class="price-box">
+              <div class="price-title">Стоимость билета</div>
+              <div class="price-val price-display">60 ¥ (~770 ₽)</div>
+              <div class="price-note note-display">Апрель–Октябрь: 60¥ (Зимой: 40¥). Понедельник закрыт!</div>
+            </div>
+            <div class="booking-box">
+              <div class="booking-label">Бронирование заранее:</div>
+              <div class="booking-links">
+                <a href="https://www.trip.com" target="_blank" class="booking-btn">Trip.com ↗</a>
+                <a href="https://bookingticket.dpm.org.cn" target="_blank" class="booking-btn">Официальный сайт ↗</a>
+              </div>
+              <div class="booking-rule">⚡ В кассах билетов нет! Продажи открываются строго за 7 дней ровно в 20:00 (по Пекину) на сайте или через WeChat.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Чжанцзяцзе -->
+        <div class="card" data-weekday="227 ¥ (~2 900 ₽)" data-weekend="227 ¥ (~2 900 ₽)" data-wnote="Билет действует 4 дня. Лифт Байлун оплачивается отдельно (+65¥ за одну поездку).">
+          <div class="img-box">
+            <span class="city-badge">Чжанцзяцзе</span>
+            <img src="images/avatar_mountains.jpg" alt="Горы Аватара" onerror="this.src='https://images.unsplash.com/photo-1513415564515-763d91423bdd?auto=format&fit=crop&w=800&q=80'">
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">Парк Чжанцзяцзе (Улинъюань)</h2>
+            <p class="card-desc">Знаменитые парящие столбы Аватара (колонна Аллилуйя), 326-метровый лифт Байлун и вершина Тяньцзы.</p>
+            <div class="price-box">
+              <div class="price-title">Стоимость билета</div>
+              <div class="price-val price-display">227 ¥ (~2 900 ₽)</div>
+              <div class="price-note note-display">Включает 4 дня входа и внутренние шаттл-басы</div>
+            </div>
+            <div class="booking-box">
+              <div class="booking-label">Бронирование заранее:</div>
+              <div class="booking-links">
+                <a href="https://www.trip.com" target="_blank" class="booking-btn">Trip.com ↗</a>
+                <a href="https://www.klook.com" target="_blank" class="booking-btn">Klook ↗</a>
+              </div>
+              <div class="booking-rule">⏰ Бронь за 10–30 дней по паспорту. Выбирайте восточные ворота парка (East Gate / Wulingyuan).</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Гора Тяньмэнь -->
+        <div class="card" data-weekday="278 ¥ (~3 600 ₽)" data-weekend="278 ¥ (~3 600 ₽)" data-wnote="В стоимость включена канатная дорога и эскалатор через скалу.">
+          <div class="img-box">
+            <span class="city-badge">Чжанцзяцзе</span>
+            <img src="images/tianmen_mountain.jpg" alt="Гора Тяньмэнь" onerror="this.src='https://images.unsplash.com/photo-1528164344705-475426879c0d?auto=format&fit=crop&w=800&q=80'">
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">Гора Тяньмэнь («Врата в Небо»)</h2>
+            <p class="card-desc">Природная скальная арка, лестница в 999 ступеней, стеклянный мост над бездной и супер-канатная дорога прямо из города.</p>
+            <div class="price-box">
+              <div class="price-title">Стоимость билета</div>
+              <div class="price-val price-display">278 ¥ (~3 600 ₽)</div>
+              <div class="price-note note-display">Маршрут Линия А (Line A) — канатка вверх, автобус вниз</div>
+            </div>
+            <div class="booking-box">
+              <div class="booking-label">Бронирование заранее:</div>
+              <div class="booking-links">
+                <a href="https://www.trip.com" target="_blank" class="booking-btn">Trip.com ↗</a>
+              </div>
+              <div class="booking-rule">⚡ Выбирайте только Линию А (Line A) и утренний интервал 07:00–08:30 для подъема без очередей.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Шанхайский Диснейленд -->
+        <div class="card" data-weekday="475 ¥ (~6 100 ₽)" data-weekend="719 ¥ (~9 200 ₽)" data-wnote="Пиковый тариф (Peak). Очереди на Tron и Zootopia в выходные достигают 100–120 мин.">
+          <div class="img-box">
+            <span class="city-badge">Шанхай</span>
+            <img src="images/shanghai_disney.jpg" alt="Диснейленд" onerror="this.src='https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80'">
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">Шанхайский Диснейленд</h2>
+            <p class="card-desc">Новейшая зона «Зверополис» (Zootopia), культовый световой мотоцикл Tron и иммерсивные «Пираты Карибского моря».</p>
+            <div class="price-box">
+              <div class="price-title">Стоимость билета</div>
+              <div class="price-val price-display">475 ¥ (~6 100 ₽)</div>
+              <div class="price-note note-display">Будний день (Regular). В выходные действует повышенный тариф!</div>
+            </div>
+            <div class="booking-box">
+              <div class="booking-label">Бронирование заранее:</div>
+              <div class="booking-links">
+                <a href="https://www.shanghaidisneyresort.com/en/" target="_blank" class="booking-btn">Официальный сайт ↗</a>
+                <a href="https://www.trip.com" target="_blank" class="booking-btn">Trip.com ↗</a>
+              </div>
+              <div class="booking-rule">📱 Обязательно установите приложение «Shanghai Disney Resort», привяжите билет для получения бесплатных Standby Pass.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Шанхайская башня -->
+        <div class="card" data-weekday="180 ¥ (~2 300 ₽)" data-weekend="180 ¥ (~2 300 ₽)" data-wnote="На закате в выходные дни очередь к скоростным лифтам занимает от 30 до 45 минут.">
+          <div class="img-box">
+            <span class="city-badge">Шанхай</span>
+            <img src="images/shanghai_tower.jpg" alt="Шанхайская башня" onerror="this.src='https://images.unsplash.com/photo-1548919973-5cef591cdbc9?auto=format&fit=crop&w=800&q=80'">
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">Шанхайская башня (Top of Shanghai)</h2>
+            <p class="card-desc">Смотровая площадка на 118 этаже (546 м). Круговой обзор небоскребов Пудуна и набережной Вайтань.</p>
+            <div class="price-box">
+              <div class="price-title">Стоимость билета</div>
+              <div class="price-val price-display">180 ¥ (~2 300 ₽)</div>
+              <div class="price-note note-display">Смотровая площадка 118 этаж (до 21:30)</div>
+            </div>
+            <div class="booking-box">
+              <div class="booking-label">Бронирование заранее:</div>
+              <div class="booking-links">
+                <a href="https://www.trip.com" target="_blank" class="booking-btn">Trip.com ↗</a>
+                <a href="https://www.klook.com" target="_blank" class="booking-btn">Klook ↗</a>
+              </div>
+              <div class="booking-rule">🌅 Бронируйте слот на 16:30–17:00 за 2–3 дня, чтобы застать закат и зажжение ночной подсветки.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-footer-nav">
+        <div></div>
+        <button class="nav-arrow-btn" onclick="switchPage(2)">К погоде и сезонам →</button>
+      </div>
+    </div>
+
+    <!-- ==================================================== -->
+    <!-- СТРАНИЦА 2: ПОГОДА, СЕЗОНЫ И КИТАЙСКИЙ НОВЫЙ ГОД     -->
+    <!-- ==================================================== -->
+    <div class="page-view" id="page-2">
+      <header>
+        <h1>Климатический гид и выбор дат</h1>
+        <p>Погода по сезонам, опасные периоды давки и честный разбор поездки на Новый год</p>
+      </header>
+
+      <h2 class="section-title">🌦 Сводка климата по 4 временам года</h2>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Сезон</th>
+              <th>Пекин (Север)</th>
+              <th>Чжанцзяцзе (Горы)</th>
+              <th>Шанхай (Побережье)</th>
+              <th>Что надевать</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>🌸 Весна (Мар–Май)</strong></td>
+              <td>+12°C…+25°C. Сухо, цветут магнолии и сады.</td>
+              <td>+14°C…+22°C. Скалы в зелени, комфортные треки.</td>
+              <td>+15°C…+24°C. Мягкое тепло, идеально для Диснея.</td>
+              <td>Слои: худи, ветровка, кроссовки.</td>
+            </tr>
+            <tr>
+              <td><strong>☀️ Лето (Июн–Авг)</strong></td>
+              <td>+28°C…+36°C. Знойно, солнцепек.</td>
+              <td>+26°C…+33°C. Сезон дождей, пышная зелень, влажно.</td>
+              <td>+30°C…+38°C. Баня, тайфуны в июле-августе.</td>
+              <td>Лен, кепка, дождевик, SPF 50+.</td>
+            </tr>
+            <tr>
+              <td><strong>🍁 Осень (Сен–Ноя)</strong></td>
+              <td>+10°C…+22°C. Золотая пора на Стене, сухо.</td>
+              <td>+16°C…+24°C. Лучшая видимость без туманов.</td>
+              <td>+18°C…+25°C. Прохладный бриз, уютные бульвары.</td>
+              <td>Идеальный сезон. Легкая куртка на вечер.</td>
+            </tr>
+            <tr>
+              <td><strong>❄️ Зима (Дек–Фев)</strong></td>
+              <td>-8°C…+2°C. Мороз, колючий ветер на Стене.</td>
+              <td>+1°C…+8°C. Густые туманы, гололед на тропах.</td>
+              <td>+4°C…+11°C. Сырость с реки, отели без батарей.</td>
+              <td>Термобелье, пуховик, обувь с протектором.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-block">
+        <h4>⛔ Периоды «Табу» — когда в Китай ехать не стоит:</h4>
+        <p>1. <strong>Золотая неделя (1–7 октября):</strong> День образования КНР. Все 1.4 млрд отдыхают — паралич транспорта, переполненные отели.</p>
+        <p>2. <strong>Майские праздники (1–5 мая):</strong> Пиковая давка на Великой стене и в Диснейленде.</p>
+        <p>3. <strong>Июль и август:</strong> Школьные каникулы + экстремальная духота до +38°C.</p>
+      </div>
+
+      <h2 class="section-title">🧧 Стоит ли ехать на Китайский Новый год?</h2>
+      <div class="info-grid">
+        <div class="info-card" style="border-left: 4px solid var(--danger);">
+          <h3 style="color:#f87171;">❌ Минусы поездки на Новый год</h3>
+          <ul>
+            <li><strong>Чуньюнь (сверхмиграция):</strong> билеты на поезда сметаются за 5 секунд после старта.</li>
+            <li><strong>Вымершие центры городов:</strong> частные кафе, лавки и уличная еда закрыты 3–5 дней.</li>
+            <li><strong>Диснейленд в пиковом шоке:</strong> очереди по 3–4 часа на один аттракцион.</li>
+            <li><strong>Зимние туманы в горах:</strong> риск не увидеть столбы Аватара из-за плотной белой стены.</li>
+          </ul>
+        </div>
+        <div class="info-card" style="border-left: 4px solid var(--accent-green);">
+          <h3 style="color:#34d399;">✨ Ради чего всё-таки едут</h3>
+          <ul>
+            <li><strong>Храмовые ярмарки (Мяохуэй) в Пекине:</strong> парки Дитань и Лунтань — танцы драконов, барабаны и древние обряды.</li>
+            <li><strong>Фестиваль фонарей в Саду Юйюань (Шанхай):</strong> гигантские светящиеся мифические драконы на воде.</li>
+            <li><strong>Красный колорит:</strong> праздничная подсветка хутунов и грандиозная атмосфера.</li>
+            <li><strong>Пустые автодороги:</strong> в мегаполисах полностью исчезают пробки.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="page-footer-nav">
+        <button class="nav-arrow-btn" onclick="switchPage(1)">← К локациям и ценам</button>
+        <button class="nav-arrow-btn" onclick="switchPage(3)">К документам и оплате →</button>
+      </div>
+    </div>
+
+    <!-- ==================================================== -->
+    <!-- СТРАНИЦА 3: ДОКУМЕНТЫ, ПЛАТЕЖИ, СВЯЗЬ И ЛАЙФХАКИ      -->
+    <!-- ==================================================== -->
+    <div class="page-view" id="page-3">
+      <header>
+        <h1>Документы, Оплата, SIM-карты и Связь</h1>
+        <p>Пошаговые инструкции для беспроблемного пребывания в Китае</p>
+      </header>
+
+      <!-- Документы и Загранпаспорт -->
+      <div class="alert-block" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.4); border-left-color: var(--accent);">
+        <h4 style="color: #fbbf24;">⚠️ Жесткое правило загранпаспорта: минимум 6 месяцев!</h4>
+        <p>Если до окончания срока действия загранпаспорта осталось <strong>менее 6 месяцев на дату подачи</strong>, китайский визовый центр автоматически <strong>откажет в приеме документов</strong>. Также в паспорте должно быть минимум 2 абсолютно чистые страницы для вклейки визы.</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>📁 Чек-лист документов с собой</h3>
+          <ul>
+            <li><strong>Загранпаспорт с действующей визой (L):</strong> оригинал держите всегда при себе (в Китае вход по паспорту во все парки, на вокзалы и в метро).</li>
+            <li><strong>Бумажные копии:</strong> распечатайте первую страницу паспорта, визу, брони отелей и обратные авиабилеты (на случай разрядки телефона).</li>
+            <li><strong>Медицинская страховка:</strong> с покрытием активного отдыха (горы, треккинг) минимум на $50 000.</li>
+            <li><strong>Карточка отеля на китайском (иероглифами):</strong> покажите таксисту, если разрядится телефон.</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>💳 Платежная система: Как платить в Китае</h3>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">В Китае не принимают пластиковые карты Visa/Mastercard, а наличные берут с трудом.</p>
+          <ol>
+            <li><strong>Основной инструмент — ALIPAY:</strong> Скачайте приложение дома. Пройдите верификацию по загранпаспорту (Account → Real-name verification).</li>
+            <li><strong>Привязка карты:</strong> В разделе <em>Bank Cards</em> привяжите зарубежную карту (Visa/Mastercard) или российскую карту <strong>UnionPay</strong> (Газпромбанк, Россельхозбанк и др.).</li>
+            <li><strong>Как платить:</strong> На кассе либо сканируйте QR продавца (Scan), либо покажите свой персональный QR-код (Pay/Collect). До 200 ¥ комиссии нет, свыше 200 ¥ — комиссия банка 3%.</li>
+            <li><strong>Резерв: WeChat Pay:</strong> Настройте как запасной вариант (в WeChat привязка зарубежных карт также поддерживается).</li>
+            <li><strong>Наличные:</strong> Возьмите с собой 1 000 – 1 500 ¥ наличными купюрами по 50 и 100 ¥ на экстренный случай.</li>
+          </ol>
+        </div>
+
+        <div class="info-card">
+          <h3>📶 Мобильный интернет и связь</h3>
+          <ul>
+            <li><span class="highlight-badge badge-green">Идеально</span> <strong>Туристическая eSIM (Airalo, Nomad, Trip.com eSIM):</strong> Оформляется онлайн еще дома. <strong style="color:#34d399;">Главный секрет:</strong> в роуминге через зарубежную eSIM китайский фаервол автоматически отключается! Telegram, WhatsApp, Google, YouTube и соцсети будут работать без всяких VPN!</li>
+            <li><span class="highlight-badge badge-blue">Альтернатива</span> <strong>Физическая SIM в аэропорту:</strong> Продается в аэропортах Пекина и Шанхая (China Unicom / China Mobile). Стоит 150–200 ¥. <span style="color:#f87171;">Минус:</span> жесткая цензура интернета, для привычных мессенджеров потребуется платный надежный VPN.</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>📱 Главные приложения для выживания</h3>
+          <ul>
+            <li><strong>Amap (Gaode Maps):</strong> Главный навигатор по Китаю. Карты Google без VPN сдвинуты на 500 метров и не показывают точные маршруты автобусов.</li>
+            <li><strong>Didi (Такси):</strong> Встроено прямо внутри Alipay. Вызывает такси, списывает деньги с привязанной карты, адрес можно вводить на английском.</li>
+            <li><strong>DeepL / Baidu Translate:</strong> Обязательно скачайте офлайн-пакет китайского языка и функцию фото-перевода меню.</li>
+            <li><strong>Trip.com:</strong> Покупка билетов на скоростные поезда и в музеи на русском языке зарубежными картами и картами МИР.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="page-footer-nav">
+        <button class="nav-arrow-btn" onclick="switchPage(2)">← К погоде и сезонам</button>
+        <button class="nav-arrow-btn" onclick="switchPage(4)">К аналитике перелетов и транспорта →</button>
+      </div>
+    </div>
+
+    <!-- ==================================================== -->
+    <!-- СТРАНИЦА 4: ПЕРЕЛЕТЫ И АНАЛИТИКА ТРАНСПОРТА          -->
+    <!-- ==================================================== -->
+    <div class="page-view" id="page-4">
+      <header>
+        <h1>Перелеты и Междугородний транспорт</h1>
+        <p>Лайфхаки экономии на билетах, анализ «Поезд vs Самолет vs Метро» и тарифы</p>
+      </header>
+
+      <h2 class="section-title">✈️ Международные авиабилеты: Стратегия и Лайфхаки</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>🎯 Когда и как покупать</h3>
+          <ul>
+            <li><strong>Золотое окно покупки:</strong> за <strong>2.5 – 4 месяца</strong> до вылета. За 2 недели до даты цены вырастают на 40–60%.</li>
+            <li><strong>Главный лайфхак — Маршрут «Мульти-сити» (Open-jaw):</strong> Не покупайте билет «Москва — Пекин — Москва». Берите составной маршрут: <em>«Город вылета ➔ Пекин»</em>, а обратно <em>«Шанхай ➔ Город вылета»</em>. Это сбережет вам 15–20 часов времени и ~800 ¥ на возвращение назад.</li>
+            <li><strong>Авиалинии:</strong> Прямые рейсы выполняют Аэрофлот, Air China, China Eastern, China Southern. Пересадочные через Чэнду, Сиань или Гуанчжоу часто дешевле на 20–30%.</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>💡 Лайфхаки бронирования</h3>
+          <ul>
+            <li><strong>Бесплатный отель при длинной пересадке:</strong> Если берете рейс с пересадкой более 8–12 часов авиакомпаниями Air China или China Southern, они часто предоставляют бесплатный отель в городе стыковки (STPC).</li>
+            <li><strong>Багаж:</strong> На китайских авиалиниях почти всегда включены 1–2 места багажа по 23 кг — отлично для покупок и чая.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 class="section-title">🚄 Аналитика транспорта между городами: Самолет vs Поезд vs Метро</h2>
+      <div class="section-desc">Глубокое сравнение вариантов перемещения по вашему маршруту с ценами и временем в пути:</div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Направление</th>
+              <th>Скоростной поезд (G-train)</th>
+              <th>Самолет (Эконом)</th>
+              <th>Обычный поезд (Ночной)</th>
+              <th>Рекомендация и выгода</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Пекин ➔ Чжанцзяцзе</strong><br><small style="color:var(--text-muted);">Расстояние ~1 600 км</small></td>
+              <td><strong>650–750 ¥</strong><br>⏱ 10 ч 30 мин (сидячий 2 класс)</td>
+              <td><strong>600–950 ¥</strong><br>⏱ 2 ч 45 мин полета</td>
+              <td><strong>380–500 ¥</strong><br>⏱ 22–24 ч (купе)</td>
+              <td><span class="highlight-badge badge-green">Выгоднее самолет</span><br>Поезд идет весь световой день. Самолет экономит 8 часов драгоценного отпуска при сравнимой цене.</td>
+            </tr>
+            <tr>
+              <td><strong>Чжанцзяцзе ➔ Шанхай</strong><br><small style="color:var(--text-muted);">Расстояние ~1 300 км</small></td>
+              <td><strong>550–650 ¥</strong><br>⏱ 8–9 ч (сидячий 2 класс)</td>
+              <td><strong>500–800 ¥</strong><br>⏱ 2 ч 15 мин полета</td>
+              <td><strong>320–460 ¥</strong><br>⏱ 19–21 ч (купе)</td>
+              <td><span class="highlight-badge badge-green">Выгоднее самолет</span><br>Прямой перелет сэкономит силы перед насыщенным Шанхаем и Диснейлендом.</td>
+            </tr>
+            <tr>
+              <td><strong>Пекин ➔ Шанхай</strong><br><small style="color:var(--text-muted);">Прямая скоростная магистраль</small></td>
+              <td><strong>550–660 ¥</strong><br>⏱ 4 ч 18 мин (Fuxing 350 км/ч)</td>
+              <td><strong>500–700 ¥</strong><br>⏱ 2 ч 15 мин (+ трансферы 2.5 ч)</td>
+              <td>—</td>
+              <td><span class="highlight-badge badge-blue">Выгоднее поезд G</span><br>Поезд прибывает из центра Пекина в центр Шанхая. В самолете с досмотрами и багажом уйдет больше 5 часов.</td>
+            </tr>
+            <tr>
+              <td><strong>Внутри Пекина и Шанхая</strong><br><small style="color:var(--text-muted);">Городской транспорт</small></td>
+              <td colspan="2">
+                <strong>Метро:</strong> 3–9 ¥ за поездку (отличная навигация, чистота, кондиционеры).<br>
+                <strong>Такси Didi:</strong> 20–50 ¥ по центру (очень доступно при поездке вдвоем-втроем).
+              </td>
+              <td>—</td>
+              <td><span class="highlight-badge badge-green">Метро + Такси</span><br>Для поездок в час пик — метро. Вечером из ресторана или в аэропорт — такси Didi.</td>
+            </tr>
+            <tr>
+              <td><strong>Шанхай: Аэропорт Пудун</strong><br><small style="color:var(--text-muted);">Трансфер в город</small></td>
+              <td colspan="3">
+                <strong>Поезд на магнитной подушке «Маглев» (Maglev):</strong> 40 ¥ (при предъявлении авиабилета).<br>
+                Скорость до 430 км/ч, довозит до станции метро Longyang Rd всего за 7 минут 20 секунд!
+              </td>
+              <td><span class="highlight-badge badge-red">Маст-хэв аттракцион</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="page-footer-nav">
+        <button class="nav-arrow-btn" onclick="switchPage(3)">← К документам и оплате</button>
+        <button class="nav-arrow-btn" onclick="switchPage(1)">Вернуться на главную ↺</button>
+      </div>
+    </div>
+
+    <footer>
+      <p>💡 <b>Совет:</b> Зарегистрируйтесь на сайте <b>12306.cn</b> или используйте <b>Trip.com</b> для мониторинга билетов на поезда за 14 дней до отправления.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Навигация между страницами
+    function switchPage(pageNumber) {
+      document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+      document.getElementById('page-' + pageNumber).classList.add('active');
+      document.getElementById('tab-' + pageNumber).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Переключение цен Будни / Выходные на странице 1
+    function setMode(mode) {
+      const buttons = document.querySelectorAll('.btn-toggle');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      if (mode === 'weekday') {
+        buttons[0].classList.add('active');
+      } else {
+        buttons[1].classList.add('active');
+      }
+
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        const priceVal = card.querySelector('.price-display');
+        const priceNote = card.querySelector('.note-display');
+
+        if (mode === 'weekend') {
+          priceVal.innerText = card.getAttribute('data-weekend');
+          priceNote.innerText = card.getAttribute('data-wnote');
+          priceVal.style.color = '#f59e0b';
+        } else {
+          priceVal.innerText = card.getAttribute('data-weekday');
+          if (card.querySelector('.card-title').innerText.includes('Диснейленд')) {
+            priceNote.innerText = 'Будний день (Regular). В выходные действует повышенный тариф!';
+          } else {
+            priceNote.innerText = 'Стандартный тариф (будни)';
+          }
+          priceVal.style.color = '#fff';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
